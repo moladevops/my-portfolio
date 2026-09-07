@@ -22,5 +22,5 @@ jobs:
         run: docker build -t moladevops237/portfolio .
       - name: push image
         run: |
-          docker login -u moladevops237 -p ${{ secrets.DOCKER_PASSWORD }}
+          docker login -u moladevops237 -p ${{ secrets.REGISTRY_PASSWORD }}
           docker push moladevops237/portfolio
