@@ -3,28 +3,66 @@ name: CI
 on:
   push:
     branches: ["main"]
+
   pull_request:
     branches: ["main"]
+
   workflow_dispatch:
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Build image
         run: |
-            docker build -t moladevops237/portfolio:${{ github.run_number }} .
-            docker build -t moladevops237/portfolio .
+          docker build \
+            -t moladevops237/portfolio:${{ github.run_number }} \
+            -t moladevops237/portfolio:latest \
+            .
 
       - name: Login to Docker Hub
         if: github.event_name != 'pull_request'
-        run: echo "${{ secrets.REGISTRY_PASS }}" | docker login -u moladevops237 --password-stdin
+        run: |
+          echo "${{ secrets.REGISTRY_PASS }}" | \
+          docker login -u moladevops237 --password-stdin
 
       - name: Push image
         if: github.event_name != 'pull_request'
         run: |
-            docker push moladevops237/portfolio:${{ github.run_number }}
-            docker push moladevops237/portfolio 
+          docker push moladevops237/portfolio:${{ github.run_number }}
+          docker push moladevops237/portfolio:latest
+
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    if: github.event_name != 'pull_request'
+
+    steps:
+      - name: SSH to server and deploy
+        uses: appleboy/ssh-action@v0.1.6
+
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+
+          script: |
+            echo "${{ secrets.REGISTRY_PASS }}" | \
+            docker login -u moladevops237 --password-stdin
+
+            docker pull moladevops237/portfolio:${{ github.run_number }}
+
+            docker stop portfolio || true
+            docker rm portfolio || true
+
+            docker run -d \
+              --name portfolio \
+              -p 80:80 \
+              moladevops237/portfolio:${{ github.run_number }}
