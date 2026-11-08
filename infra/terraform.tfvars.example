@@ -1,0 +1,4 @@
+bucket_name        = "theodoremayi-portfolio"
+domain_name        = "theodoremayi.com"
+subdomain          = "portfolio"
+certificate_domain = "*.theodoremayi.com"

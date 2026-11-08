@@ -1,7 +1,7 @@
 # Théodore MAYI MOLA — Cloud Engineer Portfolio
 
 Personal portfolio of **Théodore MAYI MOLA**, Cloud Engineer and **AWS Certified Cloud Practitioner**.
-It is a small Flask application, containerised with Docker and deployed automatically by a GitHub Actions pipeline.
+It is a small Flask application rendered to a static site and deployed automatically to S3 + CloudFront by GitHub Actions.
 
 ## Projects
 
@@ -9,24 +9,53 @@ It is a small Flask application, containerised with Docker and deployed automati
 |---|---|---|
 | Static website on AWS | S3 (private), CloudFront, OAC, ACM, Cloudflare DNS, Terraform | [Live](https://www.theodoremayi.com) · [Documentation](projects/aws-s3-cloudfront-static-website/README.md) |
 | Highly available multi-tier infrastructure | Terraform, VPC multi-AZ, ALB, Auto Scaling, RDS, EFS, S3, Route 53, SNS | [Repository](https://github.com/moladevops/AWS-PROJECT-Build-application-Infrastructure-on-AWS) |
-| CI/CD pipeline for this portfolio | Docker, Docker Hub, GitHub Actions, SSH deployment | [Workflow](.github/workflows/ci.yml) |
+| This portfolio: hosting and CI/CD | Terraform, S3, CloudFront, Cloudflare DNS, GitHub Actions with OIDC, Docker | [Infrastructure](infra/) · [Workflow](.github/workflows/ci.yml) |
 
-## How this portfolio is built and deployed
+## How this portfolio is hosted
+
+The page is written as a small Flask app, then rendered to **static files** and served from a **private S3 bucket through CloudFront**, with HTTPS (ACM) and a CNAME on **Cloudflare DNS**. No server to maintain.
 
 ```
 git push (main) ──► GitHub Actions
-                      ├─ build the Docker image
-                      ├─ push it to Docker Hub (tagged with the run number and latest)
-                      └─ SSH to the server: pull the image and restart the container
+                      ├─ build: Docker image pushed to Docker Hub
+                      └─ static-site:
+                           ├─ render the Flask page to dist/ (scripts/build_static.py)
+                           ├─ assume an AWS IAM role through OIDC (no stored AWS keys)
+                           ├─ aws s3 sync dist → private S3 bucket
+                           └─ CloudFront cache invalidation
 ```
 
-| File | Role |
+| Path | Role |
 |---|---|
-| `app.py` | Flask application: serves the page and the PDF resume (`/download-pdf`) |
-| `templates/index.html` | Portfolio page |
-| `static/` | PDF resume |
-| `Dockerfile` | Container image (Python 3.9 slim, port 5001) |
-| `.github/workflows/ci.yml` | Build, push and deploy pipeline |
+| `app.py`, `templates/`, `static/` | Flask app: the page and the PDF resume |
+| `scripts/build_static.py` | Renders the app into a static site in `dist/` |
+| `infra/` | Terraform: S3, CloudFront, OAC, Cloudflare CNAME, GitHub OIDC deploy role |
+| `.github/workflows/ci.yml` | Docker image build, static build and deployment |
+| `Dockerfile` | Container image, to run the app anywhere |
+
+## Set up the hosting (once)
+
+Prerequisites: AWS credentials, a Cloudflare API token (*Zone → DNS → Edit*) for the domain, and an issued ACM certificate in us-east-1 covering the subdomain.
+
+```bash
+cd infra
+cp terraform.tfvars.example terraform.tfvars
+export CLOUDFLARE_API_TOKEN="<your-token>"   # PowerShell: $env:CLOUDFLARE_API_TOKEN="<your-token>"
+terraform init
+terraform apply
+```
+
+Then copy the outputs into GitHub → *Settings → Secrets and variables → Actions*:
+
+| Terraform output | GitHub setting |
+|---|---|
+| `github_variable_S3_BUCKET` | **Variable** `S3_BUCKET` |
+| `github_variable_CLOUDFRONT_DISTRIBUTION_ID` | **Variable** `CLOUDFRONT_DISTRIBUTION_ID` |
+| `github_secret_AWS_DEPLOY_ROLE_ARN` | **Secret** `AWS_DEPLOY_ROLE_ARN` |
+
+The next push to `main` deploys the site. Until these values exist, the workflow only builds it.
+
+If the AWS account already has the GitHub OIDC provider, set `create_github_oidc_provider = false` in `terraform.tfvars`.
 
 ## Run locally
 
