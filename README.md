@@ -1,152 +1,51 @@
-# Flask Resume App
+# Théodore MAYI MOLA — Cloud Engineer Portfolio
 
-A modern, responsive portfolio website built with Flask, featuring a clean and professional design. This application serves as a dynamic resume/portfolio that showcases professional experience, skills, and projects in an interactive web format.
+Personal portfolio of **Théodore MAYI MOLA**, Cloud Engineer and **AWS Certified Cloud Practitioner**.
+It is a small Flask application, containerised with Docker and deployed automatically by a GitHub Actions pipeline.
 
-## Application Overview
+## Projects
 
-### Features
-- Responsive design that works on all devices
-- Modern UI with smooth animations and transitions
-- Print-friendly layout for PDF generation
-- Progressive Web App (PWA) capabilities
-- Accessibility-compliant design
-- SEO-optimized structure
+| Project | Stack | Links |
+|---|---|---|
+| Static website on AWS | S3 (private), CloudFront, OAC, ACM, Route 53 | [Live](https://www.theodoremayi.com) · [Documentation](projects/aws-s3-cloudfront-static-website/README.md) |
+| Highly available multi-tier infrastructure | Terraform, VPC multi-AZ, ALB, Auto Scaling, RDS, EFS, S3, Route 53, SNS | [Repository](https://github.com/moladevops/AWS-PROJECT-Build-application-Infrastructure-on-AWS) |
+| CI/CD pipeline for this portfolio | Docker, Docker Hub, GitHub Actions, SSH deployment | [Workflow](.github/workflows/ci.yml) |
 
-### Components
-- `app.py`: Flask application entry point
-- `templates/index.html`: Main HTML template with embedded CSS
-- `static/manifest.json`: PWA manifest file
-- `requirements.txt`: Python dependencies
-- `Dockerfile`: Container configuration
+## How this portfolio is built and deployed
 
-### Technologies Used
-- **Backend**: Python Flask
-- **Frontend**: HTML5, CSS3
-- **Design**: 
-  - CSS Grid and Flexbox for layout
-  - CSS Custom Properties for theming 
-  - CSS Animations and Transitions
-- **Optimization**:
-  - CSS containment for performance
-  - Lazy loading for images
-  - Font optimization
-  - Content caching
-- **Development**:
-  - Python virtual environment
-  - Docker containerization
+```
+git push (main) ──► GitHub Actions
+                      ├─ build the Docker image
+                      ├─ push it to Docker Hub (tagged with the run number and latest)
+                      └─ SSH to the server: pull the image and restart the container
+```
 
-## Ubuntu Deployment
+| File | Role |
+|---|---|
+| `app.py` | Flask application: serves the page and the PDF resume (`/download-pdf`) |
+| `templates/index.html` | Portfolio page |
+| `static/` | PDF resume |
+| `Dockerfile` | Container image (Python 3.9 slim, port 5001) |
+| `.github/workflows/ci.yml` | Build, push and deploy pipeline |
+
+## Run locally
+
 ```bash
-# Install dependencies
-sudo apt update
-sudo apt install python3 python3-pip
-
-# Clone project directory
-git clone https://github.com/kserge2001/docker-resume-app.git
-cd docker-resume-app
-
-# Create virtual environment
 python3 -m venv venv
 source venv/bin/activate
-
-# Install requirements
 pip install -r requirements.txt
-
-# Run the app
-export FLASK_APP=app.py
-python -m flask run --host=0.0.0.0 --port=5001
+flask --app app run --port 5001
 ```
 
-## Alpine Linux Deployment
+Or with Docker:
+
 ```bash
-# Install dependencies
-apk update
-apk add python3 py3-pip
-
-# Clone project directory
-git clone https://github.com/kserge2001/docker-resume-app.git
-cd docker-resume-app
-
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install requirements
-pip install -r requirements.txt
-
-# Run the app
-export FLASK_APP=app.py
-python -m flask run --host=0.0.0.0 --port=5001
+docker build -t portfolio .
+docker run -d -p 5001:5001 portfolio
 ```
 
-## Red Hat Enterprise Linux Deployment
-```bash
-# Install dependencies
-sudo dnf update
-sudo dnf install python3 python3-pip
+Then open http://localhost:5001.
 
-# Clone project directory
-git clone https://github.com/kserge2001/docker-resume-app.git
-cd docker-resume-app
+## Contact
 
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install requirements
-pip install -r requirements.txt
-
-# Run the app
-export FLASK_APP=app.py
-python -m flask run --host=0.0.0.0 --port=5001
-```
-
-## Amazon Linux 2 Deployment
-```bash
-# Install dependencies
-sudo yum update
-sudo yum install python3 python3-pip
-
-# Clone project directory
-git clone https://github.com/kserge2001/docker-resume-app.git
-cd docker-resume-app
-
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install requirements
-pip install -r requirements.txt
-
-# Run the app
-export FLASK_APP=app.py
-python -m flask run --host=0.0.0.0 --port=5001
-```
-
-## Docker Deployment
-
-# Dockerfile
-Create a file named `Dockerfile` with the following content:
-```dockerfile
-FROM python:3.9-slim
-
-WORKDIR /app
-
-COPY . .
-
-RUN pip install --no-cache-dir -r requirements.txt
-
-EXPOSE 5001
-
-ENV FLASK_APP=app.py
-
-CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5001"]
-```
-# docker commands
-```bash
-# Build the Docker image
-docker build -t flask-resume-app .
-
-# Run the container
-docker run -d -p 5001:5001 flask-resume-app
-```
+moladevops@gmail.com · [LinkedIn](https://www.linkedin.com/in/mola-mayi-a34438158/) · [AWS badge (Credly)](https://www.credly.com/badges/a0e12d06-cac2-4965-a12f-971044d0e08e/public_url)

@@ -4,18 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title> Serge Smith - DevOps Portfolio</title>
+    <title>Théodore MAYI MOLA - Cloud Engineer Portfolio</title>
     
     <!-- PWA Support -->
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="John Doe Portfolio">
+    <meta name="apple-mobile-web-app-title" content="Théodore MAYI MOLA Portfolio">
     
     <!-- Font Preloading -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     
     <style>
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
         :root {
             --primary: #4cc9f0;
             --secondary: #4361ee;
@@ -271,49 +273,50 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1>Mayi Mbusnum BOSS </h1>
-            <p>DevOps Engineer</p>
-            <p>mayi.mbusnum@gmail.com</p>
-            <p>Total Experience: 5+ Years</p>
+            <h1>Théodore MAYI MOLA</h1>
+            <p>Cloud Engineer | AWS Certified Cloud Practitioner</p>
+            <p><a href="mailto:moladevops@gmail.com">moladevops@gmail.com</a> · <a href="https://github.com/moladevops">github.com/moladevops</a> · <a href="https://www.linkedin.com/in/mola-mayi-a34438158/">LinkedIn</a></p>
+            <p>Nogent-sur-Marne, Greater Paris · French (native) · English (professional)</p>
         </header>
 
         <section class="section summary">
             <h2>Professional Summary</h2>
-            <p>Experienced DevOps Engineer with over 8 years in automating, optimizing, and managing cloud infrastructure. Proficient in Docker, Kubernetes, AWS, Terraform, and bash scripting, with a proven track record of implementing CI/CD pipelines and container orchestration. Skilled in Linux server administration and infrastructure as code, delivering scalable and secure solutions.</p>
+            <p>Cloud Engineer, AWS Certified Cloud Practitioner, in charge of Cloud &amp; DevOps at MCA ELITES since 2024 and former founder of Mon Coach Adapté. I design and deploy highly available AWS infrastructure (multi-AZ VPC, load balancing, Auto Scaling, RDS, EFS) as Infrastructure as Code with Terraform, secured with least-privilege IAM and monitored with CloudWatch.</p>
         </section>
 
         <section class="section">
-            <h2>Education</h2>
+            <h2>Certification &amp; Education</h2>
             <div class="education-item">
-                <strong>B.S. in Computer Science</strong> - University of Tech City<br>
-                <small>2011-2015</small>
+                <strong><a href="https://www.credly.com/badges/a0e12d06-cac2-4965-a12f-971044d0e08e/public_url">AWS Certified Cloud Practitioner</a></strong> - Amazon Web Services (verifiable Credly badge)<br>
+                <small>2026</small>
             </div>
             <div class="education-item">
-                <strong>Certified Kubernetes Administrator (CKA)</strong> - Linux Foundation<br>
+                <strong>AWS Cloud Practitioner &amp; DevOps training</strong> - Udemy &amp; AWS Skill Builder
+            </div>
+            <div class="education-item">
+                <strong>Bachelor's degree (Licence) - Sport Science, Adapted Physical Activity</strong> - UFR STAPS, Rouen, France<br>
                 <small>2019</small>
-            </div>
-            <div class="education-item">
-                <strong>AWS Certified Solutions Architect</strong> - Amazon Web Services<br>
-                <small>2020</small>
             </div>
         </section>
 
         <section class="section">
             <h2>Skills</h2>
             <div class="skills-list">
-                <span class="skill">Docker</span>
-                <span class="skill">Kubernetes</span>
                 <span class="skill">AWS</span>
-                <span class="skill">CI/CD</span>
-                <span class="skill">Linux</span>
                 <span class="skill">Terraform</span>
+                <span class="skill">EC2 / Auto Scaling / ALB</span>
+                <span class="skill">VPC</span>
+                <span class="skill">S3 / CloudFront</span>
+                <span class="skill">Route 53 / ACM</span>
+                <span class="skill">RDS / EFS</span>
+                <span class="skill">IAM</span>
+                <span class="skill">CloudWatch / SNS</span>
+                <span class="skill">Linux</span>
                 <span class="skill">Bash</span>
-                <span class="skill">Jenkins</span>
+                <span class="skill">Docker</span>
+                <span class="skill">GitHub Actions / CI/CD</span>
                 <span class="skill">Git</span>
-                <span class="skill">Python</span>
-                <span class="skill">Ansible</span>
-                <span class="skill">Prometheus</span>
-                <span class="skill">Grafana</span>
+                <span class="skill">Prometheus / Grafana</span>
             </div>
         </section>
 
@@ -321,31 +324,46 @@
             <h2>Experience</h2>
             <article class="experience-item">
                 <div class="experience-header">
-                    <div class="experience-title">Nexlify Tech - DevOps Engineer</div>
-                    <div class="experience-date">2021-Present</div>
+                    <div class="experience-title">MCA ELITES - Cloud &amp; DevOps</div>
+                    <div class="experience-date">2024-Present</div>
                 </div>
                 <ul>
-                    <li>Automated deployments using Jenkins and Docker for microservices</li>
-                    <li>Wrote Terraform scripts to provision AWS infrastructure (EC2, S3, RDS)</li>
-                    <li>Managed Kubernetes clusters on AWS EKS for scalable applications</li>
-                    <li>Developed bash scripts for log rotation and cleanup on Linux servers</li>
-                    <li>Configured AWS ECS for container orchestration of production apps</li>
-                    <li>Implemented CI/CD pipelines with GitHub Actions for zero-downtime deployments</li>
+                    <li>AWS infrastructure as code with Terraform: EC2, S3, CloudFront, Route 53, least-privilege IAM, CloudWatch monitoring</li>
+                    <li>Built and deployed a SaaS application: architecture, production release and operations</li>
+                    <li>CI/CD pipeline with GitHub Actions: build, automated tests and continuous deployment</li>
+                    <li>Monitoring with Sentry, uptime monitoring and health checks</li>
                 </ul>
             </article>
-            
+
             <article class="experience-item">
                 <div class="experience-header">
-                    <div class="experience-title">CloudWave Solutions - Cloud Engineer</div>
-                    <div class="experience-date">2018-2021</div>
+                    <div class="experience-title">Calibre Biometrics - Cloud Support</div>
+                    <div class="experience-date">2024-2025</div>
                 </div>
                 <ul>
-                    <li>Designed AWS architecture for scalable and fault-tolerant applications</li>
-                    <li>Used Terraform to deploy EC2 instances with auto-scaling groups</li>
-                    <li>Wrote bash scripts for automated server setup and configuration</li>
-                    <li>Managed Docker containers on AWS ECS for stateless applications</li>
-                    <li>Configured AWS CloudWatch for monitoring and alerting on metrics</li>
-                    <li>Automated S3 bucket creation and policies with Terraform</li>
+                    <li>Handled user requests, troubleshooting and resolving incidents on cloud services</li>
+                    <li>Ticket management: prioritisation, follow-up, escalation to technical teams, documentation of fixes</li>
+                </ul>
+            </article>
+
+            <article class="experience-item">
+                <div class="experience-header">
+                    <div class="experience-title">Inbound Health - Cloud Support</div>
+                    <div class="experience-date">2023-2024</div>
+                </div>
+                <ul>
+                    <li>Troubleshooting and resolving incidents on cloud applications and services, access issues</li>
+                    <li>Ticket management from intake to resolution: follow-up, user communication, knowledge base</li>
+                </ul>
+            </article>
+
+            <article class="experience-item">
+                <div class="experience-header">
+                    <div class="experience-title">Mon Coach Adapté - Founder</div>
+                    <div class="experience-date">2020-2024</div>
+                </div>
+                <ul>
+                    <li>Created and ran the business with full autonomy: service offering, client relationships, partnerships, invoicing</li>
                 </ul>
             </article>
         </section>
@@ -353,12 +371,20 @@
         <section class="section">
             <h2>Projects</h2>
             <article class="project-item">
-                <strong>CI/CD Pipeline</strong>
-                <p>Built an automated deployment system using Jenkins, Docker, and bash scripts. Integrated with AWS CodePipeline for zero-downtime deployments. Automated the build, test, and deployment process for microservices architecture.</p>
+                <strong>Static website on AWS: S3 + CloudFront + Route 53</strong>
+                <p>Static website served worldwide over HTTPS from a private S3 bucket through the CloudFront CDN, with Origin Access Control (OAC), an ACM certificate and a custom domain on Route 53. Live: <a href="https://www.theodoremayi.com">www.theodoremayi.com</a> · <a href="https://github.com/moladevops/my-portfolio/tree/main/projects/aws-s3-cloudfront-static-website">documentation</a></p>
             </article>
             <article class="project-item">
-                <strong>Container Orchestration</strong>
-                <p>Implemented Kubernetes clusters on AWS EKS using Terraform for infrastructure provisioning. Wrote bash scripts to automate scaling and monitoring of pods. Configured Linux nodes for optimal performance with Docker runtime.</p>
+                <strong>Highly available multi-tier web infrastructure with Terraform</strong>
+                <p>60 AWS resources as code: VPC across 3 Availability Zones with public / private subnets, NAT Gateways and a bastion host, Application Load Balancer, Auto Scaling Group launched from a custom AMI, encrypted RDS MySQL, shared EFS storage, logs shipped to S3 through an IAM role, Route 53 DNS and SNS alerts. <a href="https://github.com/moladevops/AWS-PROJECT-Build-application-Infrastructure-on-AWS">Repository</a></p>
+            </article>
+            <article class="project-item">
+                <strong>CI/CD pipeline for this portfolio</strong>
+                <p>This Flask application is containerised with Docker. On every push to main, GitHub Actions builds the image, pushes it to Docker Hub and deploys it to the server over SSH.</p>
+            </article>
+            <article class="project-item">
+                <strong>AI assistant for rideshare drivers</strong>
+                <p>AI assistant built on LLM APIs (OpenAI / Claude), containerised with Docker, with tests run in containers and monitoring with CloudWatch and Prometheus / Grafana.</p>
             </article>
         </section>
 
