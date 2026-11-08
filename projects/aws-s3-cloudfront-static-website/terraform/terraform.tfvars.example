@@ -1,0 +1,4 @@
+bucket_name        = "my-unique-static-site-bucket"
+domain_name        = "theodoremayi.com"
+subdomain          = "site"
+certificate_domain = "*.theodoremayi.com"
