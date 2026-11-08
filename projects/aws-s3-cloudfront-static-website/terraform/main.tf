@@ -25,9 +25,8 @@ locals {
   site_files = fileset(var.site_dir, "**")
 }
 
-data "aws_route53_zone" "this" {
-  name         = var.domain_name
-  private_zone = false
+data "cloudflare_zone" "this" {
+  name = var.domain_name
 }
 
 data "aws_acm_certificate" "this" {
@@ -168,18 +167,16 @@ resource "aws_s3_bucket_policy" "site" {
   depends_on = [aws_s3_bucket_public_access_block.site]
 }
 
-# ---------- Route 53: subdomain -> CloudFront (IPv4 and IPv6) ----------
+# ---------- Cloudflare DNS: subdomain -> CloudFront ----------
 
-resource "aws_route53_record" "site" {
-  for_each = toset(["A", "AAAA"])
-
-  zone_id = data.aws_route53_zone.this.zone_id
-  name    = local.site_domain
-  type    = each.value
-
-  alias {
-    name                   = aws_cloudfront_distribution.site.domain_name
-    zone_id                = aws_cloudfront_distribution.site.hosted_zone_id
-    evaluate_target_health = false
-  }
+# "DNS only" (proxied = false): Cloudflare just resolves the name, CloudFront
+# terminates HTTPS with the ACM certificate and handles caching.
+resource "cloudflare_record" "site" {
+  zone_id = data.cloudflare_zone.this.id
+  name    = var.subdomain
+  type    = "CNAME"
+  content = aws_cloudfront_distribution.site.domain_name
+  proxied = false
+  ttl     = 1
+  comment = "Static website on CloudFront, managed by Terraform"
 }

@@ -6,6 +6,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 4.40"
+    }
   }
 }
 
@@ -20,3 +24,7 @@ provider "aws" {
     }
   }
 }
+
+# The domain is registered at Cloudflare, so its DNS records live there.
+# The API token is read from the CLOUDFLARE_API_TOKEN environment variable.
+provider "cloudflare" {}

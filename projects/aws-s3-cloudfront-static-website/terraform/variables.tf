@@ -4,7 +4,7 @@ variable "bucket_name" {
 }
 
 variable "domain_name" {
-  description = "Domain hosted in Route 53, e.g. example.com"
+  description = "Domain whose DNS is managed by Cloudflare, e.g. example.com"
   type        = string
 }
 
