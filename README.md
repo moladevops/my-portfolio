@@ -7,7 +7,7 @@ It is a small Flask application, containerised with Docker and deployed automati
 
 | Project | Stack | Links |
 |---|---|---|
-| Static website on AWS | S3 (private), CloudFront, OAC, ACM, Route 53 | [Live](https://www.theodoremayi.com) · [Documentation](projects/aws-s3-cloudfront-static-website/README.md) |
+| Static website on AWS | S3 (private), CloudFront, OAC, ACM, Route 53, Terraform | [Live](https://www.theodoremayi.com) · [Documentation](projects/aws-s3-cloudfront-static-website/README.md) |
 | Highly available multi-tier infrastructure | Terraform, VPC multi-AZ, ALB, Auto Scaling, RDS, EFS, S3, Route 53, SNS | [Repository](https://github.com/moladevops/AWS-PROJECT-Build-application-Infrastructure-on-AWS) |
 | CI/CD pipeline for this portfolio | Docker, Docker Hub, GitHub Actions, SSH deployment | [Workflow](.github/workflows/ci.yml) |
 

@@ -23,13 +23,43 @@ flowchart LR
 | **AWS Certificate Manager (ACM)** | TLS certificate `*.theodoremayi.com` (us-east-1), DNS-validated through Route 53. |
 | **Amazon Route 53** | `www.theodoremayi.com` → alias A and AAAA records to the CloudFront distribution. |
 
-## What I set up
+## What I set up (first in the console, then in Terraform)
 
 1. **S3 bucket**, private by default; uploaded the site with `index.html` at the root.
 2. **ACM certificate** for `*.theodoremayi.com` in **us-east-1** (the region CloudFront requires), validated by DNS.
 3. **CloudFront distribution** with an S3 origin, an **OAC**, HTTPS, the alternate domain `www.theodoremayi.com`, and `index.html` as default root object.
 4. **Bucket policy** allowing only the CloudFront service principal, restricted to this distribution's ARN (`AWS:SourceArn`).
 5. **Route 53 alias records** (A + AAAA) from `www` to the distribution.
+
+## Deploy it with Terraform (one command)
+
+The whole stack — private bucket, website files, OAC, CloudFront distribution, bucket policy and Route 53 records — is described in [`terraform/`](terraform/).
+
+**Prerequisites:** a Route 53 hosted zone for your domain and an **issued** ACM certificate in **us-east-1** that covers the subdomain (for example `*.example.com`).
+
+```bash
+cd terraform
+cp terraform.tfvars.example terraform.tfvars   # set bucket name, domain, subdomain, certificate
+terraform init
+terraform apply
+```
+
+Outputs give the website URL, the CloudFront domain and the distribution ID. The site files come from [`site/`](site/); replace them with your own and run `terraform apply` again to upload the changes. CloudFront caches files, so after an update run:
+
+```bash
+aws cloudfront create-invalidation --distribution-id $(terraform output -raw cloudfront_distribution_id) --paths "/*"
+```
+
+Remove everything with `terraform destroy`.
+
+> A CloudFront alternate domain name can belong to only one distribution. If the subdomain is already used by a distribution created in the console (as `www` is here), pick another subdomain in `terraform.tfvars` or delete the console distribution and its Route 53 records first.
+
+| File | Content |
+|---|---|
+| `versions.tf` | Terraform and AWS provider versions; region us-east-1 (required by CloudFront for ACM) |
+| `variables.tf` | Bucket name, domain, subdomain, certificate, site folder |
+| `main.tf` | S3 bucket (private, encrypted), file upload with correct content types, OAC, CloudFront, bucket policy, Route 53 A/AAAA alias records |
+| `outputs.tf` | Website URL, CloudFront domain, distribution ID, bucket name |
 
 ## Key takeaways
 
