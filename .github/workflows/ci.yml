@@ -38,31 +38,44 @@ jobs:
           docker push moladevops237/portfolio:latest
 
 
-  deploy:
-    needs: build
+  # Static site: built on every push and pull request,
+  # deployed to S3 + CloudFront on main once the AWS variables are set (see infra/).
+  static-site:
     runs-on: ubuntu-latest
 
-    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      id-token: write   # OIDC: GitHub proves its identity to AWS, no stored AWS keys
+
+    env:
+      S3_BUCKET: ${{ vars.S3_BUCKET }}
+      CLOUDFRONT_DISTRIBUTION_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
 
     steps:
-      - name: SSH to server and deploy
-        uses: appleboy/ssh-action@v0.1.6
+      - name: Checkout
+        uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
+          python-version: "3.11"
 
-          script: |
-            echo "${{ secrets.REGISTRY_PASS }}" | \
-            docker login -u moladevops237 --password-stdin
+      - name: Build static site
+        run: |
+          pip install -r requirements.txt
+          python scripts/build_static.py dist
 
-            docker pull moladevops237/portfolio:${{ github.run_number }}
+      - name: Configure AWS credentials
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && env.S3_BUCKET != ''
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-east-1
 
-            docker stop portfolio || true
-            docker rm portfolio || true
+      - name: Upload to S3
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && env.S3_BUCKET != ''
+        run: aws s3 sync dist "s3://$S3_BUCKET" --delete
 
-            docker run -d \
-              --name portfolio \
-              -p 80:5001 \
-              moladevops237/portfolio:${{ github.run_number }}
+      - name: Invalidate CloudFront cache
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && env.S3_BUCKET != ''
+        run: aws cloudfront create-invalidation --distribution-id "$CLOUDFRONT_DISTRIBUTION_ID" --paths "/*"

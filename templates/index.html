@@ -7,7 +7,6 @@
     <title>Théodore MAYI MOLA - Cloud Engineer Portfolio</title>
     
     <!-- PWA Support -->
-    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Théodore MAYI MOLA Portfolio">
     
@@ -380,8 +379,8 @@
                 <p>60 AWS resources as code: VPC across 3 Availability Zones with public / private subnets, NAT Gateways and a bastion host, Application Load Balancer, Auto Scaling Group launched from a custom AMI, encrypted RDS MySQL, shared EFS storage, logs shipped to S3 through an IAM role, Route 53 DNS and SNS alerts. <a href="https://github.com/moladevops/AWS-PROJECT-Build-application-Infrastructure-on-AWS">Repository</a></p>
             </article>
             <article class="project-item">
-                <strong>CI/CD pipeline for this portfolio</strong>
-                <p>This Flask application is containerised with Docker. On every push to main, GitHub Actions builds the image, pushes it to Docker Hub and deploys it to the server over SSH.</p>
+                <strong>Hosting and CI/CD for this portfolio</strong>
+                <p>This page is rendered to a static site and served from a private S3 bucket through CloudFront, with infrastructure in Terraform. On every push to main, GitHub Actions builds it and deploys it to S3 with an IAM role assumed through OIDC (no stored AWS keys), then invalidates the CloudFront cache. A Docker image is also published to Docker Hub.</p>
             </article>
             <article class="project-item">
                 <strong>AI assistant for rideshare drivers</strong>
@@ -390,7 +389,7 @@
         </section>
 
         <footer class="section">
-            <a href="/download-pdf" class="download-btn">Download PDF Resume</a>
+            <a href="{{ url_for('static', filename='Theodore-MAYI-MOLA-Cloud-Engineer.pdf') }}" class="download-btn" download>Download PDF Resume</a>
         </footer>
     </div>
 </body>
